@@ -1,0 +1,8 @@
+import {NextResponse} from 'next/server';
+import {database} from '@/lib/firestore';
+import {COOKIE,TTL,checkPassword,issueSession} from '@/lib/session.mjs';
+export const runtime='nodejs';
+export async function POST(req:Request){if(req.headers.get('origin')!==new URL(req.url).origin)return NextResponse.json({error:'Richiesta non valida.'},{status:403});try{const {password}=await req.json();if(typeof password!=='string'||password.length>256)return NextResponse.json({error:'Password non valida.'},{status:400});
+// Global, distributed attempt budget: does not trust client-controlled IP headers.
+const ref=database().collection('accessLimits').doc('password');const now=Date.now();const allowed=await database().runTransaction(async tx=>{const snapshot=await tx.get(ref);const old=snapshot.data();const current=old&&old.until>now?old:{until:now+60_000,attempts:0};if(current.attempts>=10)return false;tx.set(ref,{until:current.until,attempts:current.attempts+1});return true;});if(!allowed)return NextResponse.json({error:'Troppi tentativi. Attendi un minuto e riprova.'},{status:429});if(!checkPassword(password))return NextResponse.json({error:'Password non corretta.'},{status:401});const response=NextResponse.json({ok:true});response.cookies.set(COOKIE,issueSession(),{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'lax',maxAge:TTL,path:'/'});response.headers.set('Cache-Control','no-store');return response;
+}catch(e){console.error('Login unavailable',e instanceof Error?e.name:'Error');return NextResponse.json({error:'Accesso non disponibile: verifica la configurazione del servizio.'},{status:503});}}

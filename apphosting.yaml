@@ -1,0 +1,14 @@
+runConfig:
+  minInstances: 0
+  maxInstances: 2
+  memoryMiB: 1024
+  cpu: 1
+env:
+  - variable: APP_PASSWORD
+    secret: agenda-password
+    availability:
+      - RUNTIME
+  - variable: SESSION_SECRET
+    secret: agenda-session-secret
+    availability:
+      - RUNTIME

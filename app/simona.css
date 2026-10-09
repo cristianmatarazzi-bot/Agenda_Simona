@@ -1,0 +1,73 @@
+.title-mark {
+  display: inline-block;
+  margin-left: 0.08em;
+  color: #d6b328;
+  font-family: Arial, sans-serif;
+  font-size: 0.82em;
+  font-weight: 900;
+  line-height: 0.8;
+  vertical-align: 0.04em;
+}
+
+.red-rule { background: #d6b328; }
+
+.newspaper .section-head {
+  min-height: 43px;
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  background: #d6b328;
+  color: #0b2f5b;
+}
+
+.newspaper .section-head h2,
+.newspaper .section-head .section-no,
+.newspaper .section-head .period {
+  color: #0b2f5b;
+}
+
+.newspaper .section-head h2 { font-weight: 850; }
+.newspaper .section-head .period { font-weight: 700; }
+
+.squarta-section {
+  grid-column: span 2;
+  border: 3px solid #0b2f5b !important;
+  padding: 20px !important;
+  background: #fff9dc;
+}
+
+.squarta-section .section-head {
+  border-bottom: 0;
+  margin-bottom: 16px;
+}
+
+.squarta-banner {
+  margin: -3px 0 20px;
+  padding: 14px 16px;
+  background: #0b2f5b;
+  color: white;
+}
+
+.squarta-banner span {
+  display: block;
+  margin-bottom: 4px;
+  color: #f1ce40;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.squarta-banner strong { font: 700 25px/1.1 Georgia, serif; }
+.squarta-banner p { margin: 7px 0 0; font: italic 14px Georgia, serif; color: #eff3f8; }
+.squarta-section .stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.squarta-section .story:first-child { grid-column: span 2; }
+.squarta-section .story-image { margin-bottom: 14px; }
+
+@media (max-width: 1000px) {
+  .squarta-section { grid-column: span 2; }
+}
+
+@media (max-width: 600px) {
+  .squarta-section { padding: 14px !important; }
+  .squarta-section .stories { display: block; }
+  .squarta-section .story:first-child { grid-column: auto; }
+}
