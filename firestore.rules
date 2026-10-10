@@ -1,6 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function owner() { return request.auth != null && request.auth.uid == 'RwWKrgrMJRRk7MYWGjSFrgvLKwg2'; }
+    match /feeds/{id} { allow read: if owner(); }
+    match /edition/{id} { allow read: if owner(); }
+    match /preferences/topics {
+      allow read: if owner();
+      allow create, update: if owner() && request.resource.data.keys().hasOnly(['payload','updatedAt']) && request.resource.data.payload is string && request.resource.data.payload.size() < 20000 && request.resource.data.updatedAt is string;
+    }
+    match /savedArticles/{id} {
+      allow read, delete: if owner();
+      allow create, update: if owner() && request.resource.data.keys().hasOnly(['payload','savedAt']) && request.resource.data.payload is string && request.resource.data.payload.size() < 50000 && request.resource.data.savedAt is string;
+    }
     match /{document=**} { allow read, write: if false; }
   }
 }

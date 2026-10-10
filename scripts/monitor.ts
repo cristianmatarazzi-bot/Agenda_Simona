@@ -1,7 +1,7 @@
-import {mep,parseActivities,upcoming} from '@/lib/institutions';
-import {database} from '@/lib/firestore';
-import seedActivities from '@/data/activities.json';
-import seedCalendar from '@/data/calendar.json';
+import {mep,parseActivities,upcoming} from '../lib/institutions';
+import {database} from '../lib/firestore';
+import seedActivities from '../data/activities.json';
+import seedCalendar from '../data/calendar.json';
 export const dynamic='force-dynamic';
 async function get(url:string){const r=await fetch(url,{signal:AbortSignal.timeout(12000),headers:{Accept:'text/html,text/csv;q=0.9,*/*;q=0.8'}});if(!r.ok)throw Error('HTTP '+r.status);const text=await r.text();if(/verify that you're not a robot|<title>[^<]*captcha/i.test(text))throw Error('Verifica richiesta dalla fonte');return text;}
 async function stored<T>(id:string,fallback:T):Promise<{value:T;updatedAt:string}|null>{try{const doc=await database().collection('institutionCache').doc(id).get();const row=doc.data();return row?{value:JSON.parse(row.payload),updatedAt:row.updatedAt}:null;}catch{return null;}}

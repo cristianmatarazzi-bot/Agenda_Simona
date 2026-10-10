@@ -1,3 +1,3 @@
-import {getApps,initializeApp,applicationDefault} from 'firebase-admin/app';
+import {getApps,initializeApp,applicationDefault,cert} from 'firebase-admin/app';
 import {getFirestore} from 'firebase-admin/firestore';
-export function database(){const app=getApps()[0]||initializeApp({credential:applicationDefault(),projectId:process.env.GOOGLE_CLOUD_PROJECT||process.env.GCLOUD_PROJECT});return getFirestore(app);}
+export function database(){const app=getApps()[0]||initializeApp({credential:process.env.FIREBASE_SERVICE_ACCOUNT?cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)):applicationDefault(),projectId:'agendasimona-561ce'});return getFirestore(app);}
